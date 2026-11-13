@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>SPIDER AI ENGINE · CHART-MASTER V9000 SUPREME</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #07060d;
+  --panel-bg: rgba(18, 14, 28, 0.88);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --accent-red: #ff2a5f;
+  --accent-blue: #0088ff;
+  --accent-cyan: #00f0ff;
+  --accent-gold: #fbbf24;
+  --accent-green: #10b981;
+  --accent-purple: #a855f7;
+  --accent-orange: #f97316;
+  --txt-main: #f8fafc;
+  --txt-muted: #94a3b8;
+  --font-main: 'Plus Jakarta Sans', sans-serif;
+  --font-tech: 'Orbitron', monospace;
+  --font-mono: 'Space Grotesk', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: var(--font-main);
+  color: var(--txt-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 16px 12px 48px;
+  background: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 12% 10%, rgba(255, 42, 95, 0.18), transparent 38%),
+    radial-gradient(circle at 88% 15%, rgba(0, 136, 255, 0.2), transparent 42%),
+    radial-gradient(circle at 50% 90%, rgba(168, 85, 247, 0.16), transparent 50%);
+  background-attachment: fixed;
+}
+
+#mainApp {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.top-header, .panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 18px;
+  padding: 14px 16px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(255, 42, 95, 0.14), rgba(0, 136, 255, 0.14));
+  border: 1px solid rgba(255, 42, 95, 0.35);
+}
+
+.brand-wrapper { display: flex; align-items: center; gap: 8px; }
+.brand-icon { font-size: 20px; filter: drop-shadow(0 0 8px var(--accent-red)); }
+.brand-name {
+  font-family: var(--font-tech);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #fff, var(--accent-cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.brand-ver {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(0, 240, 255, 0.15);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: var(--accent-cyan);
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 3px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mode-btn {
+  padding: 6px 12px;
+  border-radius: 9px;
+  font-family: var(--font-tech);
+  font-size: 10px;
+  font-weight: 800;
+  background: transparent;
+  color: var(--txt-muted);
+  border: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.mode-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-red), var(--accent-blue));
+  box-shadow: 0 0 14px rgba(255, 42, 95, 0.45);
+}
+
+.timer-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+}
+.period-box small {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--txt-muted);
+  text-transform: uppercase;
+}
+.period-box span {
+  font-family: var(--font-tech);
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.timer-ring {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(from -90deg, var(--accent-cyan) var(--progress, 0deg), rgba(255, 255, 255, 0.08) var(--progress, 0deg));
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);
+  transition: background 0.15s ease;
+}
+.timer-ring:before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: #0d0b14;
+}
+.timer-ring span {
+  position: relative;
+  font-family: var(--font-tech);
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+}
+.timer-ring.urgent {
+  background: conic-gradient(from -90deg, var(--accent-red) var(--progress, 0deg), rgba(255, 255, 255, 0.08) var(--progress, 0deg));
+  box-shadow: 0 0 20px rgba(255, 42, 95, 0.5);
+}
+.timer-ring.urgent span { color: var(--accent-red); }
+
+.trend-strip-card {
+  padding: 12px 14px;
+  background: linear-gradient(155deg, rgba(16, 12, 30, 0.92), rgba(8, 6, 16, 0.95));
+}
+.trend-strip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--txt-muted);
+}
+.trend-strip-header b {
+  font-family: var(--font-tech);
+  color: var(--accent-cyan);
+  font-size: 10.5px;
+  letter-spacing: 1px;
+}
+.trend-strip-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 2px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+.trend-strip-scroll::-webkit-scrollbar { height: 4px; }
+.trend-strip-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+
+.trend-node {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 28px;
+}
+.trend-node .dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-tech);
+  font-size: 10px;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.trend-node.B .dot {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+}
+.trend-node.S .dot {
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.45);
+}
+.trend-node .num {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--txt-muted);
+  font-weight: 700;
+}
+.trend-node.latest .dot {
+  outline: 2px solid #fff;
+  outline-offset: 1px;
+  animation: pulseLatest 1.4s infinite;
+}
+@keyframes pulseLatest {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+.number-trick-card {
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  background: linear-gradient(155deg, rgba(28, 14, 46, 0.95), rgba(11, 8, 20, 0.98));
+  box-shadow: 0 12px 34px rgba(168, 85, 247, 0.16);
+  text-align: center;
+}
+.section-title {
+  font-family: var(--font-tech);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.number-trick-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--txt-muted);
+}
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.badge-l1 {
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+}
+.badge-l2 {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(245, 158, 11, 0.28));
+  border: 1px solid var(--accent-gold);
+  color: #fde047;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+}
+.badge-l3 {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(236, 72, 153, 0.28));
+  border: 1px solid #c084fc;
+  color: #f0abfc;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+  animation: pulseL3 1.5s infinite ease-in-out;
+}
+@keyframes pulseL3 {
+  0%, 100% { box-shadow: 0 0 8px rgba(168, 85, 247, 0.3); transform: scale(0.99); }
+  50% { box-shadow: 0 0 16px rgba(168, 85, 247, 0.65); transform: scale(1.02); }
+}
+
+.number-trick-value {
+  font-family: var(--font-tech);
+  font-size: 52px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  margin: 12px 0 6px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.pred-3d-orb {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 900;
+  color: #fff;
+  font-family: var(--font-tech);
+  line-height: 1;
+  position: relative;
+  user-select: none;
+  animation: orbFloat3D 3s ease-in-out infinite alternate;
+}
+
+.pred-3d-orb.BIG {
+  background: radial-gradient(circle at 32% 28%, #e0f2fe 0%, #38bdf8 38%, #0284c7 72%, #075985 100%);
+  box-shadow: 
+    inset 0 4px 8px rgba(255, 255, 255, 0.7),
+    inset 0 -6px 10px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(56, 189, 248, 0.6),
+    0 8px 18px rgba(0, 0, 0, 0.45);
+}
+
+.pred-3d-orb.SMALL {
+  background: radial-gradient(circle at 32% 28%, #ffe4e6 0%, #f43f5e 38%, #e11d48 72%, #9f1239 100%);
+  box-shadow: 
+    inset 0 4px 8px rgba(255, 255, 255, 0.7),
+    inset 0 -6px 10px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(244, 63, 94, 0.6),
+    0 8px 18px rgba(0, 0, 0, 0.45);
+}
+
+@keyframes orbFloat3D {
+  0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4)); }
+  100% { transform: translateY(-4px) scale(1.05); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.55)); }
+}
+
+.number-trick-value.BIG {
+  color: #38bdf8;
+  text-shadow: 0 0 28px rgba(56, 189, 248, 0.65);
+}
+.number-trick-value.SMALL {
+  color: #f43f5e;
+  text-shadow: 0 0 28px rgba(244, 63, 94, 0.65);
+}
+
+.signal-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 8px 0;
+}
+.badge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 8px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.badge-sniper {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(249, 115, 22, 0.25));
+  border: 1px solid var(--accent-gold);
+  color: #fde047;
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.35);
+  animation: glowPulse 1.6s infinite ease-in-out;
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(251, 191, 36, 0.3); }
+  50% { box-shadow: 0 0 18px rgba(251, 191, 36, 0.6); }
+}
+.badge-volatility {
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+}
+.badge-trap-shield {
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid var(--accent-purple);
+  color: #d8b4fe;
+}
+.badge-safe {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid var(--accent-green);
+  color: #6ee7b7;
+}
+
+.consensus-bar-wrap {
+  margin: 10px 0 6px;
+}
+.consensus-meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--txt-muted);
+  margin-bottom: 4px;
+}
+.consensus-meta .b-score { color: #38bdf8; font-weight: 800; }
+.consensus-meta .s-score { color: #f43f5e; font-weight: 800; }
+.consensus-bar {
+  height: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  display: flex;
+}
+.consensus-bar-b {
+  height: 100%;
+  background: linear-gradient(90deg, #0284c7, #38bdf8);
+  transition: width 0.35s ease;
+}
+.consensus-bar-s {
+  height: 100%;
+  background: linear-gradient(90deg, #f43f5e, #e11d48);
+  transition: width 0.35s ease;
+}
+
+.hidden-logic-container {
+  display: none !important;
+}
+
+.personal-stats-card {
+  border: 1px solid rgba(0, 136, 255, 0.25);
+  background: linear-gradient(155deg, rgba(8, 22, 40, 0.95), rgba(9, 10, 24, 0.98));
+}
+.personal-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+.personal-stat {
+  padding: 8px 4px;
+  text-align: center;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  grid-column: span 2;
+}
+.personal-stat small {
+  display: block;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: var(--txt-muted);
+  letter-spacing: 0.5px;
+}
+.personal-stat b {
+  display: block;
+  font-family: var(--font-tech);
+  font-size: 17px;
+  margin-top: 3px;
+}
+#personalWins { color: var(--accent-green); }
+#personalLosses { color: var(--accent-red); }
+#personalAccuracy { color: var(--accent-cyan); }
+#personalCurrentLevel { color: var(--accent-gold); }
+#personalHighestLevel { color: var(--accent-purple); }
+
+.jackpot-counter-box {
+  background: rgba(251, 191, 36, 0.12) !important;
+  border-color: rgba(251, 191, 36, 0.4) !important;
+}
+#personalJackpots {
+  color: var(--accent-gold);
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+}
+
+.clear-btn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 42, 95, 0.4);
+  background: rgba(255, 42, 95, 0.12);
+  color: #ff9fb2;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+}
+.clear-btn:active { transform: scale(0.98); background: rgba(255, 42, 95, 0.25); }
+
+.personal-history-wrap {
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  overflow: hidden;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.personal-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5px;
+}
+.personal-history-table th {
+  padding: 8px 4px;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--txt-muted);
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.personal-history-table td {
+  padding: 7px 4px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.personal-history-table .win { color: var(--accent-green); font-weight: 800; }
+.personal-history-table .loss { color: var(--accent-red); font-weight: 800; }
+.personal-history-table .rev-chip {
+  display: inline-block;
+  font-size: 8px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: rgba(251, 191, 36, 0.2);
+  color: var(--accent-gold);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  margin-left: 2px;
+}
+.result-B { color: #38bdf8 !important; font-weight: 700; }
+.result-S { color: #f43f5e !important; font-weight: 700; }
+
+.jackpot-row {
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.35), rgba(251, 191, 36, 0.2)) !important;
+  border-top: 1px solid rgba(251, 191, 36, 0.7);
+  border-bottom: 1px solid rgba(251, 191, 36, 0.7);
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.32), inset 0 0 10px rgba(251, 191, 36, 0.25);
+  animation: jackpotPulse 2s infinite ease-in-out;
+}
+
+@keyframes jackpotPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.3), inset 0 0 6px rgba(251, 191, 36, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(251, 191, 36, 0.65), inset 0 0 16px rgba(251, 191, 36, 0.4);
+  }
+}
+
+.jackpot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-tech);
+  font-weight: 900;
+  font-size: 10px;
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(245, 158, 11, 0.6);
+  letter-spacing: 0.5px;
+  animation: jackpotTextGlow 1.4s infinite alternate;
+}
+
+@keyframes jackpotTextGlow {
+  0% { transform: scale(0.97); filter: drop-shadow(0 0 4px #fbbf24); }
+  100% { transform: scale(1.05); filter: drop-shadow(0 0 10px #f59e0b); }
+}
+
+.api-status {
+  font-size: 9px;
+  font-weight: 800;
+  text-align: center;
+  margin-top: 10px;
+}
+.api-status.ok { color: var(--accent-green); }
+.api-status.bad { color: var(--accent-red); }
+
+/* V9000 DUAL-ORB ADDITIONS (additive only) */
+.number-trick-value.dual { gap: 10px; font-size: 40px; letter-spacing: 2px; }
+.number-trick-value.dual .pred-3d-orb { width: 50px; height: 50px; font-size: 24px; }
+</style>
+</head>
+<body>
+
+<div id="mainApp">
+
+  <div class="top-header">
+    <div class="brand-wrapper">
+      <span class="brand-icon">⚡</span>
+      <span class="brand-name">SPIDER AI</span>
+      <span class="brand-ver">CHART V9000</span>
+    </div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="oneMinBtn" onclick="switchMode('1min')">1 MIN</button>
+      <button class="mode-btn" id="thirtySecBtn" onclick="switchMode('30sec')">30 SEC</button>
+    </div>
+  </div>
+
+  <div class="panel timer-panel">
+    <div class="period-box">
+      <small>Target Period</small>
+      <span id="periodId">...</span>
+    </div>
+    <div class="timer-ring" id="timerRing">
+      <span id="timer">--</span>
+    </div>
+  </div>
+
+  <div class="panel trend-strip-card">
+    <div class="trend-strip-header">
+      <b>📈 LAST 20 DRAWS TREND STRIP</b>
+      <span id="trendSummary">SYNCING...</span>
+    </div>
+    <div class="trend-strip-scroll" id="trendStrip"></div>
+  </div>
+
+  <div class="panel number-trick-card">
+    <div class="section-title">
+      <span>🎯 CHART-MASTER V9000 SUPREME</span>
+    </div>
+    <div class="number-trick-meta">
+      <span id="numberTrickPeriod">NEXT: INITIALIZING</span>
+      <span id="numberTrickLevel">ENGINE: LIVE</span>
+    </div>
+
+    <div id="numberTrickValue" class="number-trick-value BIG">
+      <span>BIG</span>
+      <span class="pred-3d-orb BIG">7</span>
+    </div>
+
+    <div class="signal-badges" id="signalBadges">
+      <span class="badge-item badge-sniper" id="sniperBadge" style="display:none">🔥 SNIPER ENTRY</span>
+      <span class="badge-item badge-volatility" id="volatilityBadge" style="display:none">⚠️ HIGH VOLATILITY</span>
+      <span class="badge-item badge-trap-shield" id="trapBadge" style="display:none">🛡️ TRAP SHIELD ACTIVE</span>
+      <span class="badge-item badge-safe" id="standardBadge">⚡ OPTIMAL CONSENSUS</span>
+    </div>
+
+    <div class="consensus-bar-wrap">
+      <div class="consensus-meta">
+        <span class="b-score" id="barScoreB">BIG: 50%</span>
+        <span id="barEntropy">CHAOS: 0%</span>
+        <span class="s-score" id="barScoreS">SMALL: 50%</span>
+      </div>
+      <div class="consensus-bar">
+        <div class="consensus-bar-b" id="barFillB" style="width: 50%;"></div>
+        <div class="consensus-bar-s" id="barFillS" style="width: 50%;"></div>
+      </div>
+    </div>
+    
+    <div id="numberTrickCalc" class="hidden-logic-container"></div>
+    <div id="numberTrickStatus" class="hidden-logic-container"></div>
+  </div>
+
+  <div class="hidden-logic-container">
+    <div id="modelsGrid">
+      <div id="modelBox_M1"><span id="modelPred_M1"></span><span id="modelAcc_M1"></span><span id="modelWt_M1"></span></div>
+      <div id="modelBox_M2"><span id="modelPred_M2"></span><span id="modelAcc_M2"></span><span id="modelWt_M2"></span></div>
+      <div id="modelBox_M3"><span id="modelPred_M3"></span><span id="modelAcc_M3"></span><span id="modelWt_M3"></span></div>
+      <div id="modelBox_M4"><span id="modelPred_M4"></span><span id="modelAcc_M4"></span><span id="modelWt_M4"></span></div>
+      <div id="modelBox_M5"><span id="modelPred_M5"></span><span id="modelAcc_M5"></span><span id="modelWt_M5"></span></div>
+      <div id="modelBox_M6"><span id="modelPred_M6"></span><span id="modelAcc_M6"></span><span id="modelWt_M6"></span></div>
+    </div>
+    <span id="optimizerStatus"></span>
+  </div>
+
+  <div class="panel personal-stats-card">
+    <div class="section-title">📊 LEVEL MATRIX & HISTORY</div>
+    <div class="personal-stats-grid">
+      <div class="personal-stat"><small>WINS</small><b id="personalWins">0</b></div>
+      <div class="personal-stat"><small>LOSSES</small><b id="personalLosses">0</b></div>
+      <div class="personal-stat"><small>ACCURACY</small><b id="personalAccuracy">—</b></div>
+      <div class="personal-stat"><small>CURRENT LVL</small><b id="personalCurrentLevel">1</b></div>
+      <div class="personal-stat"><small>MAX PEAK</small><b id="personalHighestLevel">1</b></div>
+      <div class="personal-stat jackpot-counter-box"><small>💎 JACKPOTS</small><b id="personalJackpots">0</b></div>
+    </div>
+
+    <button id="clearWinLossHistoryBtn" class="clear-btn" type="button" onclick="clearWinLossHistory()">🗑️ RESET STATS & LEVEL</button>
+
+    <div class="personal-history-wrap">
+      <table class="personal-history-table">
+        <thead>
+          <tr>
+            <th>#</th><th>PERIOD</th><th>SIGNAL</th><th>ACTUAL</th><th>RESULT</th><th>LVL</th>
+          </tr>
+        </thead>
+        <tbody id="personalHistoryBody">
+          <tr><td colspan="6">Waiting for predictions…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="apiStatus" class="api-status">API: CONNECTING...</div>
+  </div>
+
+</div>
+
+<script>
+/* =====================================================================
+   GLOBAL STATE — CHART-MASTER V9000 SUPREME ENGINE
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+
+let gameMode = '1min';
+let pollHandle = null;
+let latestRows = [];
+let deepDraws = [];
+let lastProcessedIssue = null;
+let busy = false;
+let activeEndpointIndex = 0;
+
+const MODEL_KEYS = ['M1', 'M2', 'M3', 'M4', 'M5', 'M6'];
+
+const personalStats = {
+  wins: 0, losses: 0, jackpots: 0,
+  currentLevel: 1, highestLevel: 1,
+  history: [], pending: null, seenIssues: [],
+  modelHist: { M1: [], M2: [], M3: [], M4: [], M5: [], M6: [] },
+  mistakeMemory: {}
+};
+
+/* =====================================================================
+   UTILITIES
+   ===================================================================== */
+function pad2(n) { return String(n).padStart(2, '0'); }
+
+function lg_nextIssueId(issue) {
+  const m = String(issue ?? '').match(/^(.*?)(\d+)$/);
+  if (!m) return null;
+  try {
+    return m[1] + (BigInt(m[2]) + 1n).toString().padStart(m[2].length, '0');
+  } catch (e) { return null; }
+}
+
+function getUTCPeriod() {
+  const n = new Date(), y = n.getUTCFullYear(), mo = pad2(n.getUTCMonth() + 1),
+        d = pad2(n.getUTCDate()), h = n.getUTCHours(), mi = n.getUTCMinutes();
+  if (gameMode === '1min') return `${y}${mo}${d}1000${String(10001 + h * 60 + mi).padStart(5, '0')}`;
+  const total = h * 3600 + mi * 60 + n.getUTCSeconds();
+  return `${y}${mo}${d}1000${String(50001 + Math.floor(total / 30)).padStart(5, '0')}`;
+}
+
+function getTargetPeriod() {
+  return lg_nextIssueId(lastProcessedIssue) || getUTCPeriod();
+}
+
+function issueGreater(a, b) {
+  const x = String(a ?? ''), y = String(b ?? '');
+  if (/^\d+$/.test(x) && /^\d+$/.test(y)) {
+    try { return BigInt(x) > BigInt(y); } catch (e) {}
+  }
+  return x.localeCompare(y, undefined, { numeric: true }) > 0;
+}
+
+function dedupeSort(rows) {
+  const map = new Map();
+  for (const r of rows) {
+    if (r && r.issue !== undefined) map.set(String(r.issue), r);
+  }
+  return [...map.values()].sort((a, b) =>
+    a.issue.localeCompare(b.issue, undefined, { numeric: true })
+  );
+}
+
+function updateTimerAndPeriod() {
+  const sec = new Date().getUTCSeconds();
+  const rem = gameMode === '30sec' ? 30 - (sec % 30) : 60 - sec;
+  const total = gameMode === '30sec' ? 30 : 60;
+  const progress = Math.min(360, ((total - rem) / total) * 360);
+  $('timerRing').style.setProperty('--progress', progress + 'deg');
+  $('timerRing').classList.toggle('urgent', rem <= 8);
+  $('timer').textContent = pad2(rem);
+  const currentTarget = getTargetPeriod();
+  $('periodId').textContent = currentTarget;
+  if (!personalStats.pending || personalStats.pending.issue !== currentTarget) {
+    renderPrediction();
+  }
+}
+
+/* Run-Length Encoder (Oldest-to-Newest input) */
+function rleRuns(seq) {
+  const runs = [];
+  for (let i = 0; i < seq.length; i++) {
+    if (i === 0 || seq[i] !== seq[i - 1]) runs.push({ v: seq[i], len: 1 });
+    else runs[runs.length - 1].len++;
+  }
+  return runs;
+}
+
+function otherToken(seq, val) {
+  for (let i = seq.length - 1; i >= 0; i--) {
+    if (seq[i] !== val) return seq[i];
+  }
+  if (val === 'B') return 'S';
+  if (val === 'S') return 'B';
+  if (val === 'G') return 'R';
+  return 'G';
+}
+
+/* =====================================================================
+   1. OFFICIAL 10-PATTERN CHART TREND DETECTOR (Oldest-to-Newest seq)
+   seq[seq.length - 1] === newest draw
+   Works generically for 'B'/'S' AND 'G'/'R' colour tokens.
+   ===================================================================== */
+function detectChartTrendPattern(seq) {
+  const n = seq ? seq.length : 0;
+  if (n < 2) {
+    return { pred: n ? seq[n - 1] : 'B', pattern: 'COLD START', weight: 0.50, active: false, index: 0 };
+  }
+  const last = seq[n - 1];
+  const opp = otherToken(seq, last);
+  const runs = rleRuns(seq);
+  const R = runs.length;
+  const lastRun = runs[R - 1];
+  const prevRun = R >= 2 ? runs[R - 2] : null;
+  const runLen = lastRun.len;
+
+  /* 1. LONG TREND — >= 6 identical → FOLLOW */
+  if (runLen >= 6) {
+    return { pred: last, pattern: `LONG TREND x${runLen}`, weight: 0.96, active: true, index: 1 };
+  }
+
+  /* 2. FOUR-IN-TWO — 4-same then 2-opposite → return to dominant 4-side */
+  if (prevRun && prevRun.len >= 4 && lastRun.len === 2) {
+    return { pred: prevRun.v, pattern: `FOUR-IN-TWO ${prevRun.len}-2`, weight: 0.94, active: true, index: 2 };
+  }
+
+  /* 3. THREE-IN-TWO — 3-same then 2-opposite → return to dominant 3-side */
+  if (prevRun && prevRun.len === 3 && lastRun.len === 2) {
+    return { pred: prevRun.v, pattern: 'THREE-IN-TWO 3-2', weight: 0.93, active: true, index: 3 };
+  }
+
+  /* 4. FOUR-IN-ONE — 4-same then 1-opposite → return to dominant 4-side */
+  if (prevRun && prevRun.len >= 4 && lastRun.len === 1) {
+    return { pred: prevRun.v, pattern: `FOUR-IN-ONE ${prevRun.len}-1`, weight: 0.94, active: true, index: 4 };
+  }
+
+  /* 5. THREE-IN-ONE — 3-same then 1-opposite → return to dominant 3-side */
+  if (prevRun && prevRun.len === 3 && lastRun.len === 1) {
+    return { pred: prevRun.v, pattern: 'THREE-IN-ONE 3-1', weight: 0.92, active: true, index: 5 };
+  }
+
+  /* 6. TWO-IN-ONE — 2-1-2-1 cadence (AABAA / AABAAB cycles) */
+  if (R >= 3) {
+    const r1 = runs[R - 1], r2 = runs[R - 2], r3 = runs[R - 3];
+    if (r1.v !== r2.v && r2.v !== r3.v) {
+      if (r2.len === 1 && r3.len === 2) {
+        if (r1.len === 1) return { pred: r1.v, pattern: 'TWO-IN-ONE 2-1-2 REPEAT', weight: 0.91, active: true, index: 6 };
+        if (r1.len === 2) return { pred: r2.v, pattern: 'TWO-IN-ONE 2-1-2-1 FLIP', weight: 0.91, active: true, index: 6 };
+      }
+      if (r2.len === 2 && r3.len === 1 && r1.len === 1) {
+        return { pred: r2.v, pattern: 'TWO-IN-ONE 1-2-1 FLIP', weight: 0.91, active: true, index: 6 };
+      }
+    }
+  }
+
+  /* 7. QUADRA TREND — 4-block cycles */
+  if (lastRun.len === 4) {
+    return { pred: opp, pattern: 'QUADRA 4-4 FLIP', weight: 0.90, active: true, index: 7 };
+  }
+  if (prevRun && prevRun.len === 4 && lastRun.len < 4) {
+    return { pred: last, pattern: 'QUADRA 4-4 CONTINUE', weight: 0.90, active: true, index: 7 };
+  }
+
+  /* 8. TRIPLE TREND — 3-block cycles */
+  if (lastRun.len === 3) {
+    return { pred: opp, pattern: 'TRIPLE 3-3 FLIP', weight: 0.90, active: true, index: 8 };
+  }
+  if (prevRun && prevRun.len === 3 && lastRun.len < 3) {
+    return { pred: last, pattern: 'TRIPLE 3-3 CONTINUE', weight: 0.90, active: true, index: 8 };
+  }
+
+  /* 9. DOUBLE TREND — 2-block cycles */
+  if (lastRun.len === 2) {
+    return { pred: opp, pattern: 'DOUBLE 2-2 FLIP', weight: 0.92, active: true, index: 9 };
+  }
+  if (prevRun && prevRun.len === 2 && lastRun.len === 1) {
+    return { pred: last, pattern: 'DOUBLE 2-2 REPEAT', weight: 0.92, active: true, index: 9 };
+  }
+
+  /* 10. SINGLE TREND — strict alternation */
+  if (n >= 4) {
+    const w = seq.slice(-4);
+    if (w[0] !== w[1] && w[1] !== w[2] && w[2] !== w[3]) {
+      return { pred: opp, pattern: 'SINGLE 1-1 CHOP', weight: 0.95, active: true, index: 10 };
+    }
+  }
+
+  return { pred: opp, pattern: 'RANGE DRIFT', weight: 0.60, active: false, index: 0 };
+}
+
+/* =====================================================================
+   2. SIX LIVE DETECTORS (M1 - M6) MAPPED TO THE 10 CHART TRENDS
+   ===================================================================== */
+
+/* M1 — Single Trend (1-1 Chop) & Double Trend (2-2 Pair) */
+function detM1(seq) {
+  const n = seq.length;
+  if (!n) return { pred: 'B', active: false, tag: 'INIT' };
+  const last = seq[n - 1];
+  const opp = last === 'B' ? 'S' : 'B';
+  const runs = rleRuns(seq), R = runs.length;
+  const lr = runs[R - 1], pr = R >= 2 ? runs[R - 2] : null;
+
+  if (n >= 4) {
+    const w = seq.slice(-4);
+    if (w[0] !== w[1] && w[1] !== w[2] && w[2] !== w[3]) {
+      return { pred: opp, active: true, tag: 'SINGLE 1-1 CHOP' };
+    }
+  }
+  if (lr.len === 2) return { pred: opp, active: true, tag: 'DOUBLE 2-2 FLIP' };
+  if (pr && pr.len === 2 && lr.len === 1) return { pred: last, active: true, tag: 'DOUBLE 2-2 REPEAT' };
+  return { pred: opp, active: false, tag: 'M1 PASSIVE' };
+}
+
+/* M2 — Triple Trend (3-3) & Quadra Trend (4-4) Block Detector */
+function detM2(seq) {
+  const runs = rleRuns(seq), R = runs.length;
+  if (!R) return { pred: 'B', active: false, tag: 'INIT' };
+  const lr = runs[R - 1], pr = R >= 2 ? runs[R - 2] : null;
+  const last = lr.v, opp = last === 'B' ? 'S' : 'B';
+
+  if (lr.len === 4) return { pred: opp, active: true, tag: 'QUADRA 4-4 FLIP' };
+  if (pr && pr.len === 4 && lr.len < 4) return { pred: last, active: true, tag: `QUADRA 4-4 CONTINUE x${lr.len}` };
+  if (lr.len === 3) return { pred: opp, active: true, tag: 'TRIPLE 3-3 FLIP' };
+  if (pr && pr.len === 3 && lr.len < 3) return { pred: last, active: true, tag: `TRIPLE 3-3 CONTINUE x${lr.len}` };
+  return { pred: opp, active: false, tag: 'M2 PASSIVE' };
+}
+
+/* M3 — Three-in-One (3-1) & Four-in-One (4-1) Spike-Return */
+function detM3(seq) {
+  const runs = rleRuns(seq), R = runs.length;
+  if (!R) return { pred: 'B', active: false, tag: 'INIT' };
+  const lr = runs[R - 1], pr = R >= 2 ? runs[R - 2] : null;
+  const last = lr.v, opp = last === 'B' ? 'S' : 'B';
+
+  if (pr && pr.len >= 4 && lr.len === 1) return { pred: pr.v, active: true, tag: `FOUR-IN-ONE ${pr.len}-1 RETURN` };
+  if (pr && pr.len === 3 && lr.len === 1) return { pred: pr.v, active: true, tag: 'THREE-IN-ONE 3-1 RETURN' };
+  return { pred: opp, active: false, tag: 'M3 PASSIVE' };
+}
+
+/* M4 — Two-in-One (2-1-2), Three-in-Two (3-2) & Four-in-Two (4-2) Bridge */
+function detM4(seq) {
+  const runs = rleRuns(seq), R = runs.length;
+  if (!R) return { pred: 'B', active: false, tag: 'INIT' };
+  const lr = runs[R - 1], pr = R >= 2 ? runs[R - 2] : null;
+  const last = lr.v, opp = last === 'B' ? 'S' : 'B';
+
+  if (pr && pr.len >= 4 && lr.len === 2) return { pred: pr.v, active: true, tag: `FOUR-IN-TWO ${pr.len}-2 BRIDGE` };
+  if (pr && pr.len === 3 && lr.len === 2) return { pred: pr.v, active: true, tag: 'THREE-IN-TWO 3-2 BRIDGE' };
+
+  if (R >= 3) {
+    const r1 = runs[R - 1], r2 = runs[R - 2], r3 = runs[R - 3];
+    if (r1.v !== r2.v && r2.v !== r3.v) {
+      if (r2.len === 1 && r3.len === 2) {
+        if (r1.len === 1) return { pred: r1.v, active: true, tag: 'TWO-IN-ONE 2-1-2 REPEAT' };
+        if (r1.len === 2) return { pred: r2.v, active: true, tag: 'TWO-IN-ONE 2-1-2-1 FLIP' };
+      }
+      if (r2.len === 2 && r3.len === 1 && r1.len === 1) {
+        return { pred: r2.v, active: true, tag: 'TWO-IN-ONE 1-2-1 FLIP' };
+      }
+    }
+  }
+  return { pred: opp, active: false, tag: 'M4 PASSIVE' };
+}
+
+/* M5 — Long Trend (6+ Runaway) & 100-Draw Exact Sequence Matcher */
+function matchNGramMemory(seq) {
+  const n = seq.length;
+  let wB = 0, wS = 0, m4 = 0, m3 = 0;
+
+  if (n >= 5) {
+    const tail4 = seq.slice(-4).join('');
+    for (let i = 0; i <= n - 5; i++) {
+      if (seq.slice(i, i + 4).join('') === tail4) {
+        m4++;
+        const recency = Math.exp(-0.025 * ((n - 5) - i));
+        const wt = 2.6 * recency;
+        if (seq[i + 4] === 'B') wB += wt; else wS += wt;
+      }
+    }
+  }
+  if (n >= 4) {
+    const tail3 = seq.slice(-3).join('');
+    for (let i = 0; i <= n - 4; i++) {
+      if (seq.slice(i, i + 3).join('') === tail3) {
+        m3++;
+        const recency = Math.exp(-0.025 * ((n - 4) - i));
+        const wt = 1.2 * recency;
+        if (seq[i + 3] === 'B') wB += wt; else wS += wt;
+      }
+    }
+  }
+
+  const totalW = wB + wS;
+  const probB = totalW > 0 ? wB / totalW : 0.5;
+  const probS = 1 - probB;
+  const count = m4 + m3;
+  const pred = probB >= probS ? 'B' : 'S';
+  const strength = totalW > 0 ? Math.max(probB, probS) : 0.5;
+
+  return {
+    pred, probB, probS, strength, count,
+    matches4: m4, matches3: m3,
+    active: (m4 >= 1 || m3 >= 2) && Math.abs(probB - 0.5) >= 0.05
+  };
+}
+
+function detM5(seq) {
+  const n = seq.length;
+  if (!n) return { pred: 'B', active: false, tag: 'INIT' };
+  const runs = rleRuns(seq);
+  const lr = runs[runs.length - 1];
+  const last = lr.v;
+
+  if (lr.len >= 6) return { pred: last, active: true, tag: `LONG TREND x${lr.len}` };
+
+  const hm = matchNGramMemory(seq);
+  if (hm.count >= 1) {
+    return { pred: hm.pred, active: hm.active, tag: `N-GRAM (${hm.matches4}x4 / ${hm.matches3}x3)` };
+  }
+  return { pred: last, active: false, tag: 'M5 PASSIVE' };
+}
+
+/* M6 — Colour-Size Matrix & Violet (0/5) Gravity */
+function computeDigitGravity(seq, nums) {
+  const n = nums ? nums.length : 0;
+  if (!n) {
+    return { pred: 'B', active: false, bigGravity: 0.5, smallGravity: 0.5, violetSignal: null, digitScores: {}, tag: 'DIGIT INIT', lastNum: null };
+  }
+
+  const lastNum = nums[n - 1];
+  const prevNum = n >= 2 ? nums[n - 2] : lastNum;
+
+  const trans = new Array(10).fill(0);
+  for (let i = 0; i < n - 1; i++) {
+    if (nums[i] === lastNum) {
+      const nextD = nums[i + 1];
+      if (i > 0 && nums[i - 1] === prevNum) trans[nextD] += 4.0;
+      else trans[nextD] += 1.6;
+    }
+  }
+  const maxTrans = Math.max(...trans, 1);
+
+  const gaps = new Array(10).fill(n);
+  for (let d = 0; d <= 9; d++) {
+    for (let i = n - 1; i >= 0; i--) {
+      if (nums[i] === d) { gaps[d] = (n - 1) - i; break; }
+    }
+  }
+
+  const digitScores = {};
+  for (let d = 0; d <= 9; d++) {
+    const mNorm = trans[d] / maxTrans;
+    const g = gaps[d];
+    let gapScore;
+    if (g >= 6 && g <= 15) gapScore = 1.0;
+    else if (g > 15) gapScore = 0.88;
+    else if (g === 0) gapScore = 0.05;
+    else gapScore = 0.40;
+    digitScores[d] = mNorm * 0.55 + gapScore * 0.45;
+  }
+
+  const bigRanked = [5, 6, 7, 8, 9].map(d => digitScores[d]).sort((a, b) => b - a);
+  const smallRanked = [0, 1, 2, 3, 4].map(d => digitScores[d]).sort((a, b) => b - a);
+
+  let bigGravity = (bigRanked[0] + bigRanked[1]) * 0.65 + (bigRanked.reduce((a, b) => a + b, 0) / 5) * 0.35;
+  let smallGravity = (smallRanked[0] + smallRanked[1]) * 0.65 + (smallRanked.reduce((a, b) => a + b, 0) / 5) * 0.35;
+
+  let violetSignal = null;
+  let tag = 'DIGIT GRAVITY';
+
+  if (lastNum === 0 || lastNum === 5) {
+    let flipCount = 0, holdCount = 0, bCount = 0, sCount = 0;
+    for (let i = 0; i < n - 1; i++) {
+      if (nums[i] === lastNum) {
+        if (seq[i + 1] === 'B') bCount++; else sCount++;
+        if (seq[i + 1] !== seq[i]) flipCount++; else holdCount++;
+      }
+    }
+    const lastSide = seq[n - 1];
+    if (flipCount + holdCount >= 2) {
+      if (flipCount !== holdCount) {
+        violetSignal = flipCount > holdCount ? (lastSide === 'B' ? 'S' : 'B') : lastSide;
+      } else {
+        violetSignal = bCount >= sCount ? 'B' : 'S';
+      }
+    } else {
+      violetSignal = lastNum === 0 ? 'B' : 'S';
+    }
+    if (violetSignal === 'B') bigGravity += 0.28;
+    else smallGravity += 0.28;
+    tag = `VIOLET (${lastNum}) GRAVITY`;
+  }
+
+  const pred = bigGravity >= smallGravity ? 'B' : 'S';
+  const active = Math.abs(bigGravity - smallGravity) >= 0.05 || lastNum === 0 || lastNum === 5;
+
+  return { pred, active, bigGravity, smallGravity, violetSignal, digitScores, tag, lastNum };
+}
+
+function detM6(seq, nums, cols) {
+  const n = seq ? seq.length : 0;
+  if (!n) return { pred: 'B', active: false, tag: 'INIT' };
+
+  const dg = computeDigitGravity(seq, nums);
+  const tot = (dg.bigGravity + dg.smallGravity) || 1;
+  let scoreB = dg.bigGravity / tot;
+  let tag = dg.tag;
+  let active = dg.active;
+
+  if (cols && cols.length >= 6 && seq.length >= 6) {
+    const cp = detectChartTrendPattern(cols);
+    if (cp.active) {
+      let bG = 1, sG = 1, bR = 1, sR = 1;
+      for (let i = 0; i < seq.length; i++) {
+        if (cols[i] === 'G') { if (seq[i] === 'B') bG++; else sG++; }
+        else { if (seq[i] === 'B') bR++; else sR++; }
+      }
+      const condB = cp.pred === 'G' ? (bG / (bG + sG)) : (bR / (bR + sR));
+      scoreB = scoreB * 0.60 + condB * 0.40;
+      tag = `COLOR-WAVE ${cp.pred} · ${cp.pattern}`;
+      active = true;
+    }
+  }
+
+  const pred = scoreB >= 0.5 ? 'B' : 'S';
+  return { pred, active, tag, digitGravity: dg };
+}
+
+const TRICK_LIST = [
+  { key: 'M1', name: 'Single/Double', fn: (seq, nums, cols) => detM1(seq) },
+  { key: 'M2', name: 'Triple/Quadra', fn: (seq, nums, cols) => detM2(seq) },
+  { key: 'M3', name: '3-1/4-1 Spike', fn: (seq, nums, cols) => detM3(seq) },
+  { key: 'M4', name: '2-1/3-2/4-2 Bridge', fn: (seq, nums, cols) => detM4(seq) },
+  { key: 'M5', name: 'Long/N-Gram', fn: (seq, nums, cols) => detM5(seq) },
+  { key: 'M6', name: 'Colour-Size Matrix', fn: (seq, nums, cols) => detM6(seq, nums, cols) }
+];
+
+/* =====================================================================
+   3. LIVE 30-DRAW SHADOW REPLAY (Under-Level-3 Survival Ranking)
+   ===================================================================== */
+function run30DrawShadowReplay(seqAll, numsAll, colsAll) {
+  const totalLen = seqAll.length;
+  const replayStart = Math.max(4, totalLen - 30);
+  const stepResults = { M1: [], M2: [], M3: [], M4: [], M5: [], M6: [] };
+  const ensemblePreds = [];
+  const ensembleActuals = [];
+
+  if (totalLen <= 5) {
+    const out = {};
+    MODEL_KEYS.forEach((k, idx) => {
+      out[k] = {
+        survivalRate: 0.75, underL3: 0.75, acc: 50,
+        weight: idx === 0 ? 6.0 : (idx === 1 ? 4.0 : 1.0),
+        missedLast: false
+      };
+    });
+    return { modelMetrics: out, simL3SurvivalRate: 0.78 };
+  }
+
+  for (let t = replayStart; t < totalLen; t++) {
+    const prefixSeq = seqAll.slice(0, t);
+    const prefixNums = numsAll.slice(0, t);
+    const prefixCols = colsAll.slice(0, t);
+    const actual = seqAll[t];
+
+    let voteB = 0, voteS = 0;
+    for (const tr of TRICK_LIST) {
+      let r;
+      try { r = tr.fn(prefixSeq, prefixNums, prefixCols); }
+      catch (e) { r = { pred: prefixSeq[prefixSeq.length - 1] || 'B', active: false, tag: 'ERR' }; }
+
+      const win = (r.pred === actual);
+      stepResults[tr.key].push(win);
+
+      const wFactor = r.active ? 1.30 : 0.70;
+      if (r.pred === 'B') voteB += wFactor;
+      else voteS += wFactor;
+    }
+    ensemblePreds.push(voteB >= voteS ? 'B' : 'S');
+    ensembleActuals.push(actual);
+  }
+
+  const rawMetrics = {};
+  for (const k of MODEL_KEYS) {
+    const wins = stepResults[k];
+    const L = wins.length;
+
+    let survived = 0;
+    for (let i = 0; i < L; i++) {
+      if (wins[i] || (i + 1 < L && wins[i + 1]) || (i + 2 < L && wins[i + 2])) survived++;
+    }
+    const underL3 = L ? (survived / L) : 0.5;
+    const rawAcc = L ? (wins.filter(Boolean).length / L) : 0.5;
+    const missedLast = L > 0 ? (wins[L - 1] === false) : false;
+
+    const tail8 = wins.slice(-8);
+    const recentAcc = tail8.length ? (tail8.filter(Boolean).length / tail8.length) : rawAcc;
+    const rankScore = (underL3 * 0.38) + (rawAcc * 0.32) + (recentAcc * 0.30);
+
+    rawMetrics[k] = {
+      survivalRate: underL3,
+      underL3,
+      acc: Math.round(rawAcc * 100),
+      rankScore,
+      missedLast,
+      weight: 1.0
+    };
+  }
+
+  const ranked = MODEL_KEYS.slice().sort((a, b) => rawMetrics[b].rankScore - rawMetrics[a].rankScore);
+  ranked.forEach((k, idx) => {
+    const m = rawMetrics[k];
+    if (idx === 0) m.weight = 6.0;
+    else if (idx === 1) m.weight = 4.0;
+    else if (idx >= 4) m.weight = 0.005;
+    else m.weight = 1.0;
+
+    if (m.missedLast && m.weight > 0.01) m.weight = 0.01;
+  });
+
+  const ensL = ensemblePreds.length;
+  let hits = 0;
+  for (let i = 0; i < ensL; i++) {
+    if (ensemblePreds[i] === ensembleActuals[i] ||
+        (i + 1 < ensL && ensemblePreds[i + 1] === ensembleActuals[i + 1]) ||
+        (i + 2 < ensL && ensemblePreds[i + 2] === ensembleActuals[i + 2])) hits++;
+  }
+  const simL3SurvivalRate = ensL ? (hits / ensL) : 0.78;
+
+  return { modelMetrics: rawMetrics, simL3SurvivalRate };
+}
+
+/* =====================================================================
+   4. CONSENSUS — CHART-MASTER OVERLORD
+   ===================================================================== */
+function coldStartResult(targetIssue) {
+  const digits = String(targetIssue || getTargetPeriod()).replace(/\D/g, '');
+  let checksum = 0;
+  for (let i = 0; i < digits.length; i++) {
+    checksum = (checksum * 31 + parseInt(digits[i], 10) * (i + 1)) % 9973;
+  }
+  const bias = (checksum % 2 === 0) ? 'B' : 'S';
+  const range = bias === 'B' ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4];
+  const d1 = range[checksum % 5];
+  let d2 = range[(checksum + 2) % 5];
+  if (d2 === d1) d2 = range[(checksum + 3) % 5];
+
+  const subModels = {};
+  for (let i = 0; i < 6; i++) {
+    subModels[`M${i + 1}`] = {
+      pred: bias,
+      scoreB: bias === 'B' ? 0.6 : 0.4,
+      scoreS: bias === 'S' ? 0.6 : 0.4,
+      acc: 50, weight: 1, survivalRate: 0.75, active: false,
+      reason: 'Cold-start'
+    };
+  }
+
+  return {
+    pred: bias, rawPred: bias,
+    scoreB: bias === 'B' ? 0.60 : 0.40,
+    scoreS: bias === 'S' ? 0.60 : 0.40,
+    confidence: 76, chaosScore: 30, agreeCount: 6,
+    isSniper: false, isHighVolatility: false,
+    simL3SurvivalRate: 0.75,
+    trap: { trapDetected: false, trapType: null },
+    subModels,
+    chartPattern: { pred: bias, pattern: 'COLD START', weight: 0.5, active: false, index: 0 },
+    livePattern: { pred: bias, patternName: 'COLD START', weight: 0.5, active: false },
+    seq: [],
+    coldDigits: [d1, d2]
+  };
+}
+
+function analyzeConsensus(rows, targetIssue) {
+  if (!rows || rows.length < 3) {
+    return coldStartResult(targetIssue);
+  }
+
+  /* CRITICAL DATA ORDER RULE: latestRows.slice(0,100).reverse() -> Oldest-to-Newest */
+  const sourceRows = (deepDraws && deepDraws.length >= rows.length)
+    ? deepDraws.slice(-100)
+    : rows.slice(0, 100).slice().reverse();
+
+  const seq100 = sourceRows.map(r => r.value);
+  const nums100 = sourceRows.map(r => r.number);
+  const cols100 = sourceRows.map(r => (r.baseColor === 'G' ? 'G' : 'R'));
+
+  const chartPattern = detectChartTrendPattern(seq100);
+  const replay = run30DrawShadowReplay(seq100, nums100, cols100);
+
+  const subModels = {};
+  let voteB = 0, voteS = 0;
+
+  for (const tr of TRICK_LIST) {
+    let res;
+    try { res = tr.fn(seq100, nums100, cols100); }
+    catch (e) { res = { pred: seq100[seq100.length - 1] || 'B', active: false, tag: 'ERR' }; }
+
+    const mm = replay.modelMetrics[tr.key] || {
+      survivalRate: 0.7, acc: 50, weight: 1.0, missedLast: false
+    };
+
+    let finalWeight = mm.weight;
+
+    const histMem = personalStats.modelHist[tr.key] || [];
+    if (histMem.length && histMem[histMem.length - 1] === false && finalWeight > 0.02) {
+      finalWeight = 0.01;
+    }
+
+    if (res.pred === 'B') voteB += finalWeight;
+    else voteS += finalWeight;
+
+    subModels[tr.key] = {
+      pred: res.pred,
+      scoreB: res.pred === 'B' ? Math.min(0.95, 0.55 + Math.min(finalWeight, 6.0) * 0.055) : Math.max(0.05, 0.45 - Math.min(finalWeight, 6.0) * 0.055),
+      scoreS: res.pred === 'S' ? Math.min(0.95, 0.55 + Math.min(finalWeight, 6.0) * 0.055) : Math.max(0.05, 0.45 - Math.min(finalWeight, 6.0) * 0.055),
+      acc: mm.acc,
+      survivalRate: mm.survivalRate,
+      weight: finalWeight,
+      active: !!res.active,
+      reason: `${tr.name}: ${res.tag}`
+    };
+  }
+
+  const totalVote = voteB + voteS;
+  const ensembleB = totalVote > 0 ? voteB / totalVote : 0.5;
+  const ensembleS = 1 - ensembleB;
+  const ensemblePred = ensembleB >= ensembleS ? 'B' : 'S';
+
+  /* CHART-MASTER OVERLORD: active chart pattern dictates Level-1 rawPred */
+  const rawPred = chartPattern.active ? chartPattern.pred : ensemblePred;
+
+  const chartB = rawPred === 'B'
+    ? Math.max(ensembleB, chartPattern.active ? 0.62 : ensembleB)
+    : Math.min(ensembleB, chartPattern.active ? 0.38 : ensembleB);
+  const scoreB = Math.min(0.97, Math.max(0.03, chartB));
+  const scoreS = 1 - scoreB;
+
+  const agreeCount = MODEL_KEYS.filter(k => subModels[k].pred === rawPred).length;
+  const chaosScore = Math.round((1 - Math.max(agreeCount, 6 - agreeCount) / 6) * 100);
+
+  const isSniper = (agreeCount >= 4) && (replay.simL3SurvivalRate >= 0.85) && chartPattern.active;
+  const isHighVolatility = chaosScore >= 55;
+  const confidence = Math.min(98, Math.max(72, Math.round(72 + (1 - chaosScore / 100) * 26)));
+
+  return {
+    pred: rawPred,
+    rawPred,
+    scoreB,
+    scoreS,
+    confidence,
+    chaosScore,
+    agreeCount,
+    simL3SurvivalRate: replay.simL3SurvivalRate,
+    isSniper,
+    isHighVolatility,
+    trap: { trapDetected: false, trapType: null },
+    subModels,
+    chartPattern,
+    livePattern: {
+      pred: chartPattern.pred,
+      patternName: chartPattern.pattern,
+      weight: chartPattern.weight,
+      active: chartPattern.active
+    },
+    seq: seq100.slice(-10)
+  };
+}
+
+/* =====================================================================
+   5. LEVEL RECOVERY ENGINE — CHART-ALIGNED L2 / L3+ ANTI-TRAP
+   ===================================================================== */
+function topModelKey(subModels) {
+  if (!subModels) return null;
+  let best = null, bestW = -1;
+  MODEL_KEYS.forEach(k => {
+    const sm = subModels[k];
+    if (sm && sm.weight > bestW) { bestW = sm.weight; best = k; }
+  });
+  return best;
+}
+
+function determineLevelSignal(rawPred, currentLvl, history, latestRowsArg, livePattern, subModels, chart) {
+  const lvl = Number(currentLvl) || 1;
+  let finalPred = rawPred;
+  let override = false;
+  let trapType = null;
+  let reason = '';
+  let deepRecoveryShield = false;
+
+  if (lvl === 1) {
+    finalPred = rawPred;
+    reason = chart && chart.active
+      ? `L1: Chart-Master ${chart.pattern} → ${finalPred}`
+      : `L1: 6-detector weighted consensus → ${finalPred}`;
+  } else if (lvl === 2) {
+    /* LEVEL-2 CHART-BRIDGE RECOVERY */
+    const lr = (latestRowsArg || []).slice(0, 12);
+    const seqLR = lr.map(r => r.value).slice().reverse();
+    const runs = rleRuns(seqLR);
+    const R = runs.length;
+    const lrRun = R >= 1 ? runs[R - 1] : null;
+    const prRun = R >= 2 ? runs[R - 2] : null;
+    const chartL2 = seqLR.length >= 2 ? detectChartTrendPattern(seqLR) : { active: false, pred: rawPred, pattern: 'INIT', index: 0 };
+
+    if (prRun && prRun.len >= 3 && lrRun.len <= 2 && lrRun.v !== prRun.v) {
+      /* 1. Bridge Return Lock (3-in-1 / 4-in-1 / 3-in-2 / 4-in-2) */
+      finalPred = prRun.v;
+      override = finalPred !== rawPred;
+      trapType = 'L2 CHART-BRIDGE RETURN';
+      reason = `L2: ${prRun.len}-${lrRun.len} bridge pullback → lock ${finalPred}`;
+    } else if (lrRun && lrRun.len >= 3) {
+      /* 2. Streak Escalation Lock (2-2 → Triple/Quadra/Long) */
+      finalPred = lrRun.v;
+      override = finalPred !== rawPred;
+      trapType = 'L2 STREAK ESCALATION LOCK';
+      reason = `L2: streak escalation x${lrRun.len} → lock ${finalPred}`;
+    } else if (chartL2.active && (chartL2.index === 6 || chartL2.index === 9 || chartL2.index === 10)) {
+      /* 3. Single / Double Trend Lock */
+      finalPred = chartL2.pred;
+      override = finalPred !== rawPred;
+      trapType = 'L2 SINGLE/DOUBLE TREND LOCK';
+      reason = `L2: ${chartL2.pattern} → lock ${finalPred}`;
+    } else {
+      /* 4. #1 Replay Winner Tie-Breaker + TRAP SHIELD */
+      const best = topModelKey(subModels);
+      finalPred = (best && subModels[best] && subModels[best].pred) ? subModels[best].pred : rawPred;
+      override = finalPred !== rawPred;
+      trapType = 'TRAP SHIELD ACTIVE';
+      reason = `L2: #1 replay winner ${best || 'ENSEMBLE'} → lock ${finalPred}`;
+    }
+  } else {
+    /* LEVEL 3+ HARD ANTI-TRAP LOCK */
+    const rows8 = (latestRowsArg || []).slice(0, 8);
+    const d0v = rows8[0] ? rows8[0].value : rawPred;
+    const seq8 = rows8.map(r => r.value).slice().reverse();
+    const runs8 = rleRuns(seq8);
+    const lr8 = runs8.length ? runs8[runs8.length - 1] : null;
+
+    if (lr8 && lr8.len >= 3) {
+      finalPred = d0v;
+      override = finalPred !== rawPred;
+      deepRecoveryShield = true;
+      trapType = 'L3+ TREND-RIDE LOCK';
+      reason = `L${lvl}: confirmed streak x${lr8.len} → ride ${finalPred}`;
+    } else {
+      const last6 = (latestRowsArg || []).slice(0, 6).map(r => r.value);
+      let flips = 0;
+      for (let i = 1; i < last6.length; i++) if (last6[i] !== last6[i - 1]) flips++;
+      const altRate = last6.length > 1 ? flips / (last6.length - 1) : 0;
+
+      if (altRate >= 0.60) {
+        finalPred = d0v === 'B' ? 'S' : 'B';
+        override = finalPred !== rawPred;
+        deepRecoveryShield = true;
+        trapType = 'L3+ CHOP REVERSAL LOCK';
+        reason = `L${lvl}: ${Math.round(altRate * 100)}% chop regime → opposite ${finalPred}`;
+      } else {
+        const last5 = (latestRowsArg || []).slice(0, 5).map(r => r.value);
+        const bCount = last5.filter(v => v === 'B').length;
+        finalPred = bCount >= 3 ? 'B' : 'S';
+        override = finalPred !== rawPred;
+        deepRecoveryShield = true;
+        trapType = 'L3+ DOMINANCE LOCK';
+        reason = `L${lvl}: dominant side of last 5 → ${finalPred}`;
+      }
+    }
+  }
+
+  const badgeClass = lvl === 1 ? 'badge-l1' : (lvl === 2 ? 'badge-l2' : 'badge-l3');
+  const badgeText = lvl === 1 ? '🎯 L1 CHART' : (lvl === 2 ? '🎯 L2 RECOVERY' : `🛡️ L${lvl} RECOVERY`);
+  const trapDetected = (lvl >= 2 && override) || deepRecoveryShield;
+
+  return {
+    finalPred,
+    rawPred,
+    reversed: finalPred !== rawPred,
+    levelBadge: `<span class="level-badge ${badgeClass}">${badgeText}</span>`,
+    levelBadgeText: badgeText,
+    reason,
+    trap: { trapDetected, trapType },
+    override
+  };
+}
+
+/* =====================================================================
+   6. CHART COLOUR-SIZE DUAL-ORB JACKPOT ENGINE (2 NUMBERS)
+   ===================================================================== */
+function predictDualJackpotDigits(finalPred, currentLvl, rows, history, targetIssue) {
+  const targetRange = (finalPred === 'B') ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4];
+  const allRows = (Array.isArray(rows) && rows.length) ? rows.slice(0, 100) : [];
+
+  const lastNum = (allRows[0] && typeof allRows[0].number === 'number')
+    ? allRows[0].number : (finalPred === 'B' ? 7 : 2);
+  const prevNum = (allRows[1] && typeof allRows[1].number === 'number')
+    ? allRows[1].number : lastNum;
+
+  /* --- 1. CHART COLOUR-WAVE (35%) --- */
+  const colorSeq = allRows.slice().reverse().map(r => (r.baseColor === 'G' ? 'G' : 'R'));
+  let colorPred = null;
+  let colorPattern = 'COLD';
+  if (colorSeq.length >= 5) {
+    const cp = detectChartTrendPattern(colorSeq);
+    if (cp.active) { colorPred = (cp.pred === 'G' ? 'G' : 'R'); colorPattern = cp.pattern; }
+  }
+  if (!colorPred) {
+    const recent = colorSeq.slice(-6);
+    const gCount = recent.filter(c => c === 'G').length;
+    colorPred = gCount >= 3 ? 'G' : 'R';
+    colorPattern = 'RECENT MAJORITY';
+  }
+
+  const greenSet = (finalPred === 'B') ? [7, 9] : [1, 3];
+  const redSet = (finalPred === 'B') ? [6, 8] : [2, 4];
+  const boostSet = (colorPred === 'G') ? greenSet : redSet;
+  const violetTarget = (finalPred === 'B') ? 5 : 0;
+  const violetInRecent = allRows.slice(0, 4).some(r => r.number === 0 || r.number === 5);
+
+  /* --- 2. MARKOV TRANSITION (35%) --- */
+  const markov = {};
+  targetRange.forEach(d => { markov[d] = 0; });
+  for (let i = 1; i < allRows.length; i++) {
+    const curN = allRows[i].number;
+    const nextN = allRows[i - 1].number;
+    if (markov[nextN] === undefined) continue;
+    if (curN !== lastNum) continue;
+    let w = 1.6;
+    if (i + 1 < allRows.length && allRows[i + 1].number === prevNum) w = 5.5;
+    markov[nextN] += w;
+  }
+  const maxMarkov = Math.max(...Object.values(markov), 1);
+
+  /* --- 3. GAP + HOT CLUSTER (20%) --- */
+  const gapMap = {};
+  for (let d = 0; d <= 9; d++) {
+    let gap = allRows.length || 15;
+    for (let i = 0; i < allRows.length; i++) {
+      if (allRows[i].number === d) { gap = i; break; }
+    }
+    gapMap[d] = gap;
+  }
+  const hot12 = {};
+  for (let d = 0; d <= 9; d++) hot12[d] = 0;
+  for (let i = 0; i < Math.min(12, allRows.length); i++) {
+    const num = allRows[i].number;
+    if (hot12[num] !== undefined) hot12[num]++;
+  }
+  let twinActive = false;
+  for (let i = 0; i < Math.min(4, allRows.length - 1); i++) {
+    if (allRows[i].number === allRows[i + 1].number) { twinActive = true; break; }
+  }
+
+  /* --- 4. MIRROR / NEIGHBOR DRIFT (10%) --- */
+  const mirrorDigit = (lastNum + 5) % 10;
+  const neighborUp = (lastNum + 1) % 10;
+  const neighborDown = (lastNum + 9) % 10;
+
+  const scores = {};
+  targetRange.forEach(d => {
+    /* Colour-size component */
+    let sColor = 0.20;
+    if (boostSet.indexOf(d) !== -1) sColor += 0.60;
+    if (violetInRecent && d === violetTarget) sColor += 0.25;
+    sColor = Math.min(1.0, sColor);
+
+    /* Markov component */
+    const sMarkov = (markov[d] || 0) / maxMarkov;
+
+    /* Gap component */
+    const gap = gapMap[d];
+    const freq = hot12[d] || 0;
+    let sGap;
+    if (gap === 0 && !twinActive) sGap = 0.03;
+    else if (gap >= 6 && gap <= 15) sGap = 1.00;
+    else if (gap > 15) sGap = 0.90;
+    else if (freq >= 2 && freq <= 3) sGap = 0.85;
+    else if (gap === 0 && twinActive) sGap = 0.45;
+    else sGap = 0.30 + gap * 0.06;
+    sGap = Math.min(1.0, sGap);
+
+    /* Drift component */
+    let sDrift = 0.10;
+    if (d === mirrorDigit) sDrift += 0.45;
+    if (d === neighborUp || d === neighborDown) sDrift += 0.35;
+    sDrift = Math.min(1.0, sDrift);
+
+    scores[d] = sColor * 0.35 + sMarkov * 0.35 + sGap * 0.20 + sDrift * 0.10;
+  });
+
+  /* Hard penalty: previous missed numbers rotate out at L2+ */
+  if (currentLvl >= 2 && Array.isArray(history) && history.length > 0) {
+    const recentSlice = history.slice(-(Math.min(history.length, currentLvl)));
+    recentSlice.forEach(entry => {
+      if (entry && !entry.isJackpot && Array.isArray(entry.predictedNumbers)) {
+        entry.predictedNumbers.forEach(pn => {
+          const prevD = Number(pn);
+          if (!isNaN(prevD) && scores[prevD] !== undefined) scores[prevD] -= 1.5;
+        });
+      }
+    });
+  }
+
+  const ranked = targetRange.slice().sort((a, b) => scores[b] - scores[a]);
+  const primaryDigit = ranked[0];
+  const secondaryDigit = ranked.length > 1 ? ranked[1] : ranked[0];
+
+  const topScore = Math.max(0, scores[primaryDigit]);
+  const digitConfidence = Math.min(97, Math.max(81, Math.round(78 + topScore * 19)));
+  const colorBias = (primaryDigit % 2 === 1) ? 'GREEN (Odd)' : 'RED (Even)';
+
+  return {
+    primaryDigit,
+    secondaryDigit,
+    digitConfidence,
+    colorBias,
+    colorPred,
+    colorPattern,
+    gapReport: gapMap
+  };
+}
+
+/* =====================================================================
+   RENDER — Dual 3D Orbs + Badges + Telemetry
+   ===================================================================== */
+function renderLockedPrediction(p) {
+  const finalWord = (p.pred === 'B') ? 'BIG' : 'SMALL';
+
+  let nums = [];
+  if (Array.isArray(p.predictedNumbers) && p.predictedNumbers.length) {
+    nums = p.predictedNumbers.map(Number);
+  } else if (p.predictedNumber !== undefined && p.predictedNumber !== null) {
+    nums = [Number(p.predictedNumber)];
+  } else {
+    nums = [p.pred === 'B' ? 7 : 2];
+  }
+
+  const digitConf = p.digitConfidence || 88;
+
+  $('numberTrickPeriod').textContent = 'NEXT: ' + p.issue;
+
+  if (p.levelBadge) {
+    $('numberTrickLevel').innerHTML = p.levelBadge;
+  } else {
+    $('numberTrickLevel').innerHTML = '<span class="level-badge badge-l1">🎯 L1 CHART</span>';
+  }
+
+  let orbsHtml = '';
+  nums.forEach(n => {
+    orbsHtml += `<span class="pred-3d-orb ${finalWord}" title="Jackpot Target Digit [${n}]">${n}</span>`;
+  });
+
+  $('numberTrickValue').innerHTML = `<span>${finalWord}</span>${orbsHtml}`;
+  $('numberTrickValue').className = 'number-trick-value dual ' + finalWord;
+
+  const sniperEl = $('sniperBadge');
+  const volEl = $('volatilityBadge');
+  const trapEl = $('trapBadge');
+  const stdEl = $('standardBadge');
+
+  const trapActive = !!(p.trap && p.trap.trapDetected);
+  if (sniperEl) sniperEl.style.display = p.isSniper ? 'inline-flex' : 'none';
+  if (volEl) volEl.style.display = p.isHighVolatility ? 'inline-flex' : 'none';
+  if (trapEl) trapEl.style.display = trapActive ? 'inline-flex' : 'none';
+  if (stdEl) stdEl.style.display = (!p.isSniper && !p.isHighVolatility && !trapActive) ? 'inline-flex' : 'none';
+
+  const bPct = Math.round(p.scoreB * 100);
+  const sPct = 100 - bPct;
+  $('barScoreB').textContent = `BIG: ${bPct}%`;
+  $('barScoreS').textContent = `SMALL: ${sPct}%`;
+  $('barEntropy').textContent = `CHAOS: ${p.chaosScore || 0}%`;
+  $('barFillB').style.width = `${bPct}%`;
+  $('barFillS').style.width = `${sPct}%`;
+
+  const statusEl = $('numberTrickStatus');
+  if (statusEl) {
+    const patName = p.livePattern ? p.livePattern.patternName : 'N/A';
+    if (p.isHighVolatility) {
+      statusEl.textContent = `⚠️ High Volatility · Chaos ${p.chaosScore}% · Pattern: ${patName}`;
+    } else {
+      statusEl.textContent = `Pattern: ${patName} · L${p.level} · ${finalWord} [${nums.join(', ')}] (${p.confidence}%)`;
+    }
+  }
+
+  const calcEl = $('numberTrickCalc');
+  if (calcEl) {
+    const patName = p.livePattern ? p.livePattern.patternName : 'N/A';
+    const targetRange = (p.pred === 'B') ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4];
+    const gapReport = p.gapReport || {};
+    const gapsDisplay = targetRange
+      .map(d => `${d}:${gapReport[d] !== undefined ? gapReport[d] : '?'}`)
+      .join(' · ');
+
+    let html = `<div class="calc-line"><strong>🎯 DUAL JACKPOT TARGETS (L${p.level}):</strong> [${nums.join(', ')}] · Conf: ${digitConf}%</div>`;
+    html += `<div class="calc-line"><strong>COLOUR WAVE:</strong> ${p.colorPred || '—'} (${p.colorPattern || '—'}) · Bias: ${p.colorBias || 'N/A'}</div>`;
+    html += `<div class="calc-line"><strong>GAP (draws since):</strong> ${gapsDisplay}</div>`;
+    html += `<div class="calc-line"><strong>CHART PATTERN:</strong> ${patName}</div>`;
+    html += `<div class="calc-line"><strong>RECENT DRAWS:</strong> ${p.seq && p.seq.length ? p.seq.join(' ') : 'SYNCED'}</div>`;
+    html += `<div class="calc-line"><strong>CONSENSUS:</strong> BIG ${bPct}% / SMALL ${sPct}% · Chaos ${p.chaosScore}%</div>`;
+    if (trapActive) {
+      html += `<div class="trap-notice">🛡️ <strong>${p.trap.trapType || 'RECOVERY SHIELD'}</strong> override active</div>`;
+    }
+    html += `<div class="calc-line"><strong>OPTIMAL SIGNAL:</strong> <span class="pred">${finalWord} [${nums.join(', ')}]</span> · L${p.level}</div>`;
+    calcEl.innerHTML = html;
+  }
+
+  renderModelTelemetry(p.subModels);
+}
+
+function renderPrediction() {
+  const target = getTargetPeriod();
+  const liveAvailable = latestRows.length > 0;
+
+  if (personalStats.pending && personalStats.pending.issue === target) {
+    if (!(personalStats.pending.isColdStart && liveAvailable)) {
+      renderLockedPrediction(personalStats.pending);
+      return;
+    }
+  }
+
+  $('numberTrickPeriod').textContent = 'NEXT: ' + target;
+
+  const a = analyzeConsensus(latestRows, target);
+  const currentLvl = personalStats.currentLevel || 1;
+
+  const lvlDecision = determineLevelSignal(
+    a.pred, currentLvl, personalStats.history, latestRows, a.livePattern, a.subModels, a.chartPattern
+  );
+
+  const jackpotResult = predictDualJackpotDigits(
+    lvlDecision.finalPred, currentLvl, latestRows, personalStats.history, target
+  );
+
+  let digits = [jackpotResult.primaryDigit, jackpotResult.secondaryDigit];
+  if (!liveAvailable && Array.isArray(a.coldDigits)) digits = a.coldDigits.slice();
+  if (digits[0] === digits[1]) {
+    const range = lvlDecision.finalPred === 'B' ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4];
+    digits[1] = range.find(d => d !== digits[0]);
+  }
+
+  const combinedTrap = {
+    trapDetected: (a.trap && a.trap.trapDetected) || (lvlDecision.trap && lvlDecision.trap.trapDetected),
+    trapType: (lvlDecision.trap && lvlDecision.trap.trapDetected)
+      ? lvlDecision.trap.trapType
+      : (a.trap ? a.trap.trapType : null)
+  };
+
+  personalStats.pending = {
+    issue: target,
+    pred: lvlDecision.finalPred,
+    rawPred: a.rawPred,
+    predictedNumbers: digits,
+    predictedNumber: digits[0],
+    digitConfidence: jackpotResult.digitConfidence,
+    colorBias: jackpotResult.colorBias,
+    colorPred: jackpotResult.colorPred,
+    colorPattern: jackpotResult.colorPattern,
+    gapReport: jackpotResult.gapReport,
+    level: currentLvl,
+    reversed: lvlDecision.reversed,
+    levelBadge: lvlDecision.levelBadge,
+    levelBadgeText: lvlDecision.levelBadgeText,
+    reason: lvlDecision.reason,
+    isColdStart: !liveAvailable,
+    seq: a.seq.slice(),
+    scoreB: a.scoreB,
+    scoreS: a.scoreS,
+    confidence: a.confidence,
+    chaosScore: a.chaosScore,
+    isSniper: a.isSniper,
+    isHighVolatility: a.isHighVolatility,
+    trap: combinedTrap,
+    subModels: a.subModels,
+    livePattern: a.livePattern,
+    chartPattern: a.chartPattern
+  };
+
+  renderLockedPrediction(personalStats.pending);
+}
+
+function renderTrendStrip(rows) {
+  const container = $('trendStrip');
+  if (!container) return;
+
+  let draws = [];
+  if (Array.isArray(rows) && rows.length > 0) {
+    draws = rows.slice(0, 20).slice().reverse();
+  }
+
+  if (draws.length === 0) {
+    $('trendSummary').textContent = 'INITIALIZING ENGINE';
+    container.innerHTML = `<div style="font-size:10px; color:var(--txt-muted); padding:6px 0;">Awaiting live draw history · Chart-Master V9000 standing by</div>`;
+    return;
+  }
+
+  const bigs = draws.filter(d => d.value === 'B').length;
+  const smalls = draws.length - bigs;
+  $('trendSummary').textContent = `${draws.length} DRAWS · B:${bigs} | S:${smalls}`;
+
+  let html = '';
+  draws.forEach((d, idx) => {
+    const isLatest = idx === draws.length - 1;
+    const num = (d.number !== undefined && d.number !== null) ? d.number : (d.value === 'B' ? '7' : '2');
+    html += `
+      <div class="trend-node ${d.value} ${isLatest ? 'latest' : ''}" title="Issue ${d.issue} - Number: ${num}">
+        <div class="dot">${d.value}</div>
+        <div class="num">${num}</div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+  setTimeout(() => { container.scrollLeft = container.scrollWidth; }, 50);
+}
+
+function renderModelTelemetry(subModels) {
+  if (!subModels) return;
+
+  let bestModel = null, maxAcc = -1;
+  let mutedCount = 0;
+
+  MODEL_KEYS.forEach(k => {
+    const sm = subModels[k];
+    if (!sm) return;
+
+    const predEl = $(`modelPred_${k}`);
+    if (predEl) {
+      predEl.textContent = sm.pred === 'B' ? 'BIG' : 'SMALL';
+      predEl.className = 'model-pred ' + sm.pred;
+    }
+
+    const accEl = $(`modelAcc_${k}`);
+    if (accEl) accEl.textContent = `Acc: ${sm.acc}%`;
+
+    const wtEl = $(`modelWt_${k}`);
+    const boxEl = $(`modelBox_${k}`);
+    if (wtEl && boxEl) {
+      const wtVal = (sm.weight || 0).toFixed(2);
+      wtEl.textContent = `${wtVal}x WT`;
+      boxEl.classList.remove('muted', 'boosted');
+      wtEl.className = 'model-weight normal';
+      if (sm.weight >= 1.5) {
+        boxEl.classList.add('boosted');
+        wtEl.className = 'model-weight boost';
+        wtEl.textContent = `${wtVal}x BOOST`;
+      } else if (sm.weight <= 0.25) {
+        boxEl.classList.add('muted');
+        wtEl.className = 'model-weight mute';
+        wtEl.textContent = `${wtVal}x MUTED`;
+        mutedCount++;
+      }
+    }
+
+    if (sm.acc > maxAcc) {
+      maxAcc = sm.acc;
+      bestModel = k;
+    }
+  });
+
+  const names = { M1: 'Single/Double', M2: 'Triple/Quadra', M3: '3-1/4-1 Spike', M4: '2-1/3-2/4-2 Bridge', M5: 'Long/N-Gram', M6: 'Colour-Size' };
+  const statusEl = $('optimizerStatus');
+  if (statusEl) {
+    if (bestModel && maxAcc > 0) {
+      statusEl.innerHTML = `Top: <b>${names[bestModel]} (${maxAcc}%)</b> | ${mutedCount} Muted`;
+    } else {
+      statusEl.textContent = `Live Adaptive Weights Active`;
+    }
+  }
+}
+
+/* =====================================================================
+   STATS / HISTORY PERSISTENCE
+   ===================================================================== */
+function statsKey() { return 'spider_panel_stats_v9_' + gameMode; }
+
+function loadStats() {
+  try {
+    const x = JSON.parse(localStorage.getItem(statsKey()) || 'null');
+    if (x) {
+      personalStats.history = Array.isArray(x.history) ? x.history : [];
+      personalStats.seenIssues = Array.isArray(x.seenIssues) ? x.seenIssues : [];
+      personalStats.wins = personalStats.history.filter(h => h.status === 'WIN').length;
+      personalStats.losses = personalStats.history.filter(h => h.status === 'LOSS').length;
+      personalStats.jackpots = Number(x.jackpots) || personalStats.history.filter(h => h.isJackpot).length;
+      let run = 0, peak = 1;
+      for (const r of personalStats.history) {
+        if (r.status === 'LOSS') { run++; peak = Math.max(peak, run + 1); }
+        else if (r.status === 'WIN') { run = 0; }
+      }
+      personalStats.currentLevel = Number(x.currentLevel) || (run + 1);
+      personalStats.highestLevel = Math.max(1, Number(x.highestLevel) || peak, personalStats.currentLevel);
+      if (x.modelHist && typeof x.modelHist === 'object') {
+        personalStats.modelHist = x.modelHist;
+      }
+      personalStats.mistakeMemory = (x.mistakeMemory && typeof x.mistakeMemory === 'object' && !Array.isArray(x.mistakeMemory))
+        ? x.mistakeMemory : {};
+    }
+  } catch (e) {}
+  renderStats();
+}
+
+function saveStats() {
+  try {
+    localStorage.setItem(statsKey(), JSON.stringify({
+      history: personalStats.history.slice(-200),
+      seenIssues: personalStats.seenIssues.slice(-300),
+      wins: personalStats.wins,
+      losses: personalStats.losses,
+      jackpots: personalStats.jackpots,
+      currentLevel: personalStats.currentLevel,
+      highestLevel: personalStats.highestLevel,
+      modelHist: personalStats.modelHist,
+      mistakeMemory: personalStats.mistakeMemory
+    }));
+  } catch (e) {}
+}
+
+function renderStats() {
+  $('personalWins').textContent = personalStats.wins;
+  $('personalLosses').textContent = personalStats.losses;
+  const jackpotEl = $('personalJackpots');
+  if (jackpotEl) jackpotEl.textContent = personalStats.jackpots || 0;
+
+  const total = personalStats.wins + personalStats.losses;
+  $('personalAccuracy').textContent = total ? Math.round((personalStats.wins / total) * 100) + '%' : '—';
+  $('personalCurrentLevel').textContent = personalStats.currentLevel;
+  $('personalHighestLevel').textContent = personalStats.highestLevel;
+
+  const body = $('personalHistoryBody');
+  body.innerHTML = personalStats.history.length ? personalStats.history.slice().reverse().map((r, i) => {
+    const predWord = r.pred === 'B' ? 'BIG' : 'SMALL';
+
+    let numsDisplay = '';
+    if (Array.isArray(r.predictedNumbers) && r.predictedNumbers.length) {
+      numsDisplay = ` [${r.predictedNumbers.join(', ')}]`;
+    } else if (r.predictedNumber !== undefined && r.predictedNumber !== null) {
+      numsDisplay = ` [${r.predictedNumber}]`;
+    }
+
+    const signalDisplay = `${predWord}${numsDisplay}`;
+    const actualWord = r.actual === 'B' ? 'BIG' : 'SMALL';
+    const actualDisplay = `${actualWord} (${r.number})`;
+
+    let resultDisplay = '';
+    if (r.isJackpot) {
+      resultDisplay = '<span class="jackpot-badge">💎 JACKPOT</span>';
+    } else if (r.status === 'WIN') {
+      resultDisplay = '<span class="win">WIN</span>';
+    } else {
+      resultDisplay = '<span class="loss">LOSS</span>';
+    }
+
+    const rowClass = r.isJackpot ? 'class="jackpot-row"' : '';
+
+    return `
+      <tr ${rowClass}>
+        <td>${personalStats.history.length - i}</td>
+        <td>${r.issue.slice(-5)}</td>
+        <td class="${r.pred === 'B' ? 'result-B' : 'result-S'}">
+          ${signalDisplay}${r.reversed ? '<span class="rev-chip">REV</span>' : ''}
+        </td>
+        <td class="${r.actual === 'B' ? 'result-B' : 'result-S'}">${actualDisplay}</td>
+        <td>${resultDisplay}</td>
+        <td>L${r.level || 1}</td>
+      </tr>
+    `;
+  }).join('') : '<tr><td colspan="6">No resolved rounds yet</td></tr>';
+}
+
+function clearWinLossHistory() {
+  try { localStorage.removeItem(statsKey()); } catch (e) {}
+  personalStats.wins = 0;
+  personalStats.losses = 0;
+  personalStats.jackpots = 0;
+  personalStats.currentLevel = 1;
+  personalStats.highestLevel = 1;
+  personalStats.history = [];
+  personalStats.seenIssues = [];
+  personalStats.pending = null;
+  personalStats.modelHist = { M1: [], M2: [], M3: [], M4: [], M5: [], M6: [] };
+  personalStats.mistakeMemory = {};
+  renderStats();
+  renderPrediction();
+}
+
+/* =====================================================================
+   SETTLEMENT — Dual-Orb Jackpot + Model Memory
+   ===================================================================== */
+function settlePrediction(r) {
+  const issue = String(r.issue);
+  if (personalStats.seenIssues.includes(issue)) return;
+
+  const p = personalStats.pending;
+  if (!p || p.issue !== issue) {
+    personalStats.seenIssues.push(issue);
+    personalStats.seenIssues = personalStats.seenIssues.slice(-300);
+    saveStats();
+    return;
+  }
+
+  if (p.subModels) {
+    MODEL_KEYS.forEach(k => {
+      const sm = p.subModels[k];
+      if (sm && sm.pred) {
+        const isModelWin = (sm.pred === r.value);
+        if (!personalStats.modelHist[k]) personalStats.modelHist[k] = [];
+        personalStats.modelHist[k].push(isModelWin);
+        personalStats.modelHist[k] = personalStats.modelHist[k].slice(-15);
+      }
+    });
+  }
+
+  const win = (p.pred === r.value);
+
+  const predNums = Array.isArray(p.predictedNumbers)
+    ? p.predictedNumbers.map(Number)
+    : (p.predictedNumber !== undefined && p.predictedNumber !== null ? [Number(p.predictedNumber)] : []);
+
+  const isJackpot = predNums.indexOf(Number(r.number)) !== -1;
+
+  const levelUsed = Number(p.level) || personalStats.currentLevel || 1;
+
+  personalStats.history.push({
+    issue,
+    pred: p.pred,
+    predictedNumbers: predNums,
+    predictedNumber: predNums.length ? predNums[0] : null,
+    actual: r.value,
+    number: r.number,
+    status: win ? 'WIN' : 'LOSS',
+    isJackpot: !!isJackpot,
+    level: levelUsed,
+    reversed: !!p.reversed
+  });
+
+  personalStats.seenIssues.push(issue);
+  personalStats.seenIssues = personalStats.seenIssues.slice(-300);
+  personalStats.pending = null;
+
+  if (isJackpot) personalStats.jackpots = (personalStats.jackpots || 0) + 1;
+
+  if (win) {
+    personalStats.wins += 1;
+    personalStats.currentLevel = 1;
+  } else {
+    personalStats.losses += 1;
+    personalStats.currentLevel = levelUsed + 1;
+  }
+
+  personalStats.highestLevel = Math.max(personalStats.highestLevel, personalStats.currentLevel);
+  saveStats();
+  renderStats();
+}
+
+/* =====================================================================
+   API FETCH — single-request ultra-fast extraction (up to 100 draws)
+   ===================================================================== */
+const API_ENDPOINTS = {
+  '1min': [
+    '/api/lottery/WinGo/WinGo_1M/GetHistoryIssuePage.json',
+    'https://draw.ar-lottery02.com/WinGo/WinGo_1M/GetHistoryIssuePage.json',
+    'https://draw.ar-lottery03.com/WinGo/WinGo_1M/GetHistoryIssuePage.json',
+    'https://draw.ar-lottery04.com/WinGo/WinGo_1M/GetHistoryIssuePage.json',
+    'https://draw.ar-lottery05.com/WinGo/WinGo_1M/GetHistoryIssuePage.json'
+  ],
+  '30sec': [
+    '/api/lottery/WinGo/WinGo_30S/GetHistoryIssuePage.json',
+    'https://draw.ar-lottery02.com/WinGo/WinGo_30S/GetHistoryIssuePage.json',
+    'https://draw.ar-lottery03.com/WinGo/WinGo_30S/GetHistoryIssuePage.json',
+    'https://draw.ar-lottery04.com/WinGo/WinGo_30S/GetHistoryIssuePage.json',
+    'https://draw.ar-lottery05.com/WinGo/WinGo_30S/GetHistoryIssuePage.json'
+  ]
+};
+
+function extractRows(payload) {
+  const found = [], seen = new Set();
+  function walk(n, d = 0) {
+    if (!n || typeof n !== 'object' || d > 9 || seen.has(n)) return;
+    seen.add(n);
+    if (Array.isArray(n)) { n.forEach(x => walk(x, d + 1)); return; }
+    const issue = n.issueNumber ?? n.issue_number ?? n.issue ?? n.period ?? n.periodNumber ?? n.issue_no ?? n.drawId;
+    const raw = n.number ?? n.resultNumber ?? n.result_number ?? n.result ?? n.openNumber ?? n.open_number ?? n.winNumber;
+    if (issue !== undefined && raw !== undefined) {
+      const m = String(raw).match(/(?:^|\D)([0-9])(?:\D|$)/);
+      if (m) {
+        const number = +m[1];
+        found.push({
+          issue: String(issue),
+          number,
+          value: number >= 5 ? 'B' : 'S',
+          baseColor: (number % 2 === 1) ? 'G' : 'R',
+          isViolet: (number === 0 || number === 5),
+          parity: (number % 2 === 0) ? 'EVEN' : 'ODD'
+        });
+      }
+    }
+    Object.values(n).forEach(v => walk(v, d + 1));
+  }
+  walk(payload);
+  return [...new Map(found.map(x => [x.issue, x])).values()].sort((a, b) =>
+    a.issue.localeCompare(b.issue, undefined, { numeric: true })
+  );
+}
+
+async function fetchPage(url, timeoutMs = 4000) {
+  const c = new AbortController();
+  const t = setTimeout(() => c.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { cache: 'no-store', signal: c.signal });
+    clearTimeout(t);
+    if (!res.ok) return null;
+    const rows = extractRows(await res.json());
+    return rows.length ? rows : null;
+  } catch (e) {
+    clearTimeout(t);
+    return null;
+  }
+}
+
+async function fetchWithFallback() {
+  const endpoints = API_ENDPOINTS[gameMode] || [];
+  for (let a = 0; a < endpoints.length; a++) {
+    const idx = (activeEndpointIndex + a) % endpoints.length;
+    const ep = endpoints[idx];
+    const sep = ep.includes('?') ? '&' : '?';
+    const url = `${ep}${sep}pageNo=1&pageSize=100&ts=${Date.now()}`;
+    const rows = await fetchPage(url, 4000);
+    if (rows && rows.length) {
+      activeEndpointIndex = idx;
+      return rows;
+    }
+    const plain = await fetchPage(ep + sep + 'ts=' + Date.now(), 4000);
+    if (plain && plain.length) {
+      activeEndpointIndex = idx;
+      return plain;
+    }
+  }
+  return null;
+}
+
+async function pollAPI() {
+  if (busy) return;
+  busy = true;
+  try {
+    const fresh = await fetchWithFallback();
+    if (fresh && fresh.length) {
+      deepDraws = dedupeSort(deepDraws.concat(fresh)).slice(-100);
+      latestRows = deepDraws.slice().reverse();
+
+      const newest = deepDraws[deepDraws.length - 1];
+      if (lastProcessedIssue === null) {
+        lastProcessedIssue = newest.issue;
+      } else {
+        const newDraws = deepDraws.filter(r => issueGreater(r.issue, lastProcessedIssue));
+        for (const r of newDraws) {
+          settlePrediction(r);
+          lastProcessedIssue = r.issue;
+        }
+      }
+
+      $('apiStatus').textContent = `API CONNECTED · ${deepDraws.length} DRAWS`;
+      $('apiStatus').className = 'api-status ok';
+      renderTrendStrip(latestRows);
+      renderPrediction();
+    } else {
+      $('apiStatus').textContent = 'ENGINE ACTIVE · CHART-MASTER LOCAL SYNC';
+      $('apiStatus').className = 'api-status ok';
+      renderTrendStrip(latestRows);
+      renderPrediction();
+    }
+  } catch (e) {
+    console.error('pollAPI', e);
+  } finally {
+    busy = false;
+  }
+}
+
+function stopPolling() { if (pollHandle) clearInterval(pollHandle); pollHandle = null; }
+function startPolling() { pollAPI(); pollHandle = setInterval(pollAPI, 3500); }
+
+function switchMode(mode) {
+  if (mode === gameMode) return;
+  gameMode = mode;
+  latestRows = [];
+  deepDraws = [];
+  lastProcessedIssue = null;
+  personalStats.pending = null;
+  personalStats.mistakeMemory = {};
+  activeEndpointIndex = 0;
+
+  loadStats();
+
+  $('oneMinBtn').classList.toggle('active', mode === '1min');
+  $('thirtySecBtn').classList.toggle('active', mode === '30sec');
+  renderTrendStrip(latestRows);
+  renderPrediction();
+  stopPolling();
+  startPolling();
+  updateTimerAndPeriod();
+}
+
+/* =====================================================================
+   BOOT
+   ===================================================================== */
+loadStats();
+setInterval(updateTimerAndPeriod, 1000);
+updateTimerAndPeriod();
+renderTrendStrip(latestRows);
+renderPrediction();
+startPolling();
+</script>
+</body>
+</html>
